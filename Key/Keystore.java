@@ -96,7 +96,11 @@ String 값으로 넣어 String 값으로 반환되게 메소드를 구성했습�
                     (KeyStore.SecretKeyEntry) keyStore.getEntry(alias,null); // 별칭에 맞게 비밀키 접근
             SecretKey secretKey = secretKeyEntry.getSecretKey(); // 대칭키 반환
 
-            key = Base64.encodeBase64String(secretKey.getEncoded()); // 키는 'String'형태로 반환
+            // 키는 'String'형태로 반환
+            if((Build.VERSION.SDK_INT <= Build.VERSION_CODES.N))
+                key = new String(Base64.encodeBase64(secretKey.getEncoded()));
+            else
+                key = Base64.encodeBase64String(secretKey.getEncoded());
 
             iv = key.substring(0,16);
             byte[] keyBytes = new byte[16];
