@@ -113,8 +113,12 @@ String 값으로 넣어 String 값으로 반환되게 메소드를 구성했습�
             // AES 암호화
             byte[] encrypted = c.doFinal(str.getBytes("UTF-8"));
 
+            // 누가버전까지는 Base64.encodeBase64String NotMethod 이슈발생
             // 암호화된 데이터, 인코딩 후 'String'으로 반환
-            keyStore_Encryption_DATA = Base64.encodeBase64String(encrypted);
+            if((Build.VERSION.SDK_INT <= Build.VERSION_CODES.N))
+                keyStore_Encryption_DATA = new String(Base64.encodeBase64(encrypted));
+            else
+                keyStore_Encryption_DATA = Base64.encodeBase64String(encrypted); 
 
         } catch (InvalidAlgorithmParameterException e) {
             System.err.println("keyStore_Encryption InvalidAlgorithmParameterException error");
@@ -147,7 +151,7 @@ String 값으로 넣어 String 값으로 반환되게 메소드를 구성했습�
 String 값으로 넣어 String 값으로 반환되게 메소드를 구성했습니다. 
 * *****/
 
-     // 키스토어의 AES대칭키로 데이터 호화하는 메소드
+     // 키스토어의 AES대칭키로 데이터 복호화하는 메소드
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static String keyStore_Decryption(String str){
         String keyStore_Decryption_DATA="";
@@ -162,7 +166,12 @@ String 값으로 넣어 String 값으로 반환되게 메소드를 구성했습�
                     (KeyStore.SecretKeyEntry) keyStore.getEntry(alias,null); // 별칭에 맞게 비밀키 접근
             SecretKey secretKey = secretKeyEntry.getSecretKey(); // 비밀키 반환
 
-            key = Base64.encodeBase64String(secretKey.getEncoded()); // 비밀키는 'String'형태로 반환
+            
+            // 비밀키는 'String'형태로 반환
+            if((Build.VERSION.SDK_INT <= Build.VERSION_CODES.N))
+                key = new String(Base64.encodeBase64(secretKey.getEncoded()));
+            else
+                key = Base64.encodeBase64String(secretKey.getEncoded());
 
             iv = key.substring(0,16);
             byte[] keyBytes = new byte[16];
