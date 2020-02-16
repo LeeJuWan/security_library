@@ -38,11 +38,15 @@ public class RSA {
         PublicKey publicKey = keyPair.getPublic(); // 생성된 공개키 추출
         PrivateKey privateKey = keyPair.getPrivate(); // 생성된 개인키 추출
 
-      
-        publicKEY = Base64.encodeBase64String(publicKey.getEncoded()); // 공개키 객체를 'String'으로 변환
-
-     
-        privateKEY = Base64.encodeBase64String(privateKey.getEncoded()); // 개인키 객체를 'String'으로 변환
+         // 누가버전까지는 Base64.encodeBase64String NotMethod 이슈발생
+        if((Build.VERSION.SDK_INT > Build.VERSION_CODES.N)){
+            publicKEY = new String(Base64.encodeBase64(publicKey.getEncoded()));
+            privateKEY = new String(Base64.encodeBase64(privateKey.getEncoded()));
+        }else{
+            publicKEY = Base64.encodeBase64String(publicKey.getEncoded()); // 공개키 객체를 'String'으로 변환
+            privateKEY = Base64.encodeBase64String(privateKey.getEncoded()); // 개인키 객체를 'String'으로 변환
+        }
+        
         
         /**이렇게 String 형태로 가지고있으면 네트웤 전송 시, 객체변환/인코딩의 번거로움이 없어질 것같습니다.**/
     }
@@ -64,8 +68,12 @@ public class RSA {
 
             // 암호화 진행
             byte[] byteEncryptedData = cipher.doFinal(plainData.getBytes());
+                
             // 암호화 데이터, 인코딩 후 'String'으로 반환
-            return Base64.encodeBase64String(byteEncryptedData);
+            if((Build.VERSION.SDK_INT > Build.VERSION_CODES.N))
+               return new String(Base64.encodeBase64(byteEncryptedData));
+            else
+               return Base64.encodeBase64String(byteEncryptedData);
     }
 
     /*복호화*/
@@ -92,5 +100,4 @@ public class RSA {
             // 복호화 후 'String'으로 반환
             return new String(byteDecryptedData);
         }
-
 }
