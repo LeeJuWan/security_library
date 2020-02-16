@@ -31,10 +31,13 @@ public class AES {
         generator.init(256, secureRandom); // 충분한 키 길이 및 난수를 이용하여 키 초기화
         Key secureKey = generator.generateKey();
         
-        secretKEYY = Base64.encodeBase64String(secureKey.getEncoded()); // 대칭키 객체를 'String'으로 변환
-        
+        // 누가버전까지는 Base64.encodeBase64String NotMethod 이슈발생
+        if((Build.VERSION.SDK_INT > Build.VERSION_CODES.N))
+            secretKEY = Base64.encodeBase64String(secureKey.getEncoded()); // 대칭키 객체를 'String'으로 변환
+        else
+            secretKEY = new String(Base64.encodeBase64(secureKey.getEncoded()));
+       
         /**이렇게 String 형태로 가지고있으면 네트웤 전송 시, 객체변환/인코딩의 번거로움이 없어질 것같습니다.**/
-        
     }
 
 // AES 암호는 대칭암호로써, 운용모드와 패딩이라는 절차가 들어가 있습니다.
@@ -69,7 +72,10 @@ public class AES {
         byte[] encrypted = cipher.doFinal(str.getBytes("UTF-8"));
 
         // 암호화된 데이터, 인코딩 후 'String'으로 반환
-        return Base64.encodeBase64String(encrypted);
+        if((Build.VERSION.SDK_INT > Build.VERSION_CODES.N)){
+            return new String(Base64.encodeBase64(encrypted));
+        else
+            return Base64.encodeBase64String(encrypted);
     }
 
     public static String aesDecryption(String str, String key) throws UnsupportedEncodingException,
