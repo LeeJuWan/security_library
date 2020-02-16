@@ -32,10 +32,11 @@ public class AES {
         Key secureKey = generator.generateKey();
         
         // 누가버전까지는 Base64.encodeBase64String NotMethod 이슈발생
-        if((Build.VERSION.SDK_INT > Build.VERSION_CODES.N))
-            secretKEY = Base64.encodeBase64String(secureKey.getEncoded()); // 대칭키 객체를 'String'으로 변환
-        else
+        // 대칭키 객체를 'String'으로 변환
+        if((Build.VERSION.SDK_INT <= Build.VERSION_CODES.N))
             secretKEY = new String(Base64.encodeBase64(secureKey.getEncoded()));
+        else
+            secretKEY = Base64.encodeBase64String(secureKey.getEncoded()); 
        
         /**이렇게 String 형태로 가지고있으면 네트웤 전송 시, 객체변환/인코딩의 번거로움이 없어질 것같습니다.**/
     }
@@ -72,7 +73,7 @@ public class AES {
         byte[] encrypted = cipher.doFinal(str.getBytes("UTF-8"));
 
         // 암호화된 데이터, 인코딩 후 'String'으로 반환
-        if((Build.VERSION.SDK_INT > Build.VERSION_CODES.N)){
+        if((Build.VERSION.SDK_INT <= Build.VERSION_CODES.N)){
             return new String(Base64.encodeBase64(encrypted));
         else
             return Base64.encodeBase64String(encrypted);
