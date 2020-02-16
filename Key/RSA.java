@@ -39,7 +39,7 @@ public class RSA {
         PrivateKey privateKey = keyPair.getPrivate(); // 생성된 개인키 추출
 
          // 누가버전까지는 Base64.encodeBase64String NotMethod 이슈발생
-        if((Build.VERSION.SDK_INT > Build.VERSION_CODES.N)){
+        if((Build.VERSION.SDK_INT <= Build.VERSION_CODES.N)){
             publicKEY = new String(Base64.encodeBase64(publicKey.getEncoded()));
             privateKEY = new String(Base64.encodeBase64(privateKey.getEncoded()));
         }else{
@@ -70,7 +70,7 @@ public class RSA {
             byte[] byteEncryptedData = cipher.doFinal(plainData.getBytes());
                 
             // 암호화 데이터, 인코딩 후 'String'으로 반환
-            if((Build.VERSION.SDK_INT > Build.VERSION_CODES.N))
+            if((Build.VERSION.SDK_INT <= Build.VERSION_CODES.N))
                return new String(Base64.encodeBase64(byteEncryptedData));
             else
                return Base64.encodeBase64String(byteEncryptedData);
