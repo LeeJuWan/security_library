@@ -63,7 +63,7 @@ public class RSA {
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
             // 만들어진 공개키객체를 기반으로 암호화를 설정하는 과정
-            Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey); // 암호화 준비
 
             // 암호화 진행
@@ -88,7 +88,7 @@ public class RSA {
             PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
 
             // 만들어진 개인키객체를 기반으로 복호화를 설정하는 과정
-            Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE, privateKey); // 복호화 준비
 
             // 암호화된 인코딩 데이터를 디코딩 진행
