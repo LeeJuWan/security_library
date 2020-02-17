@@ -85,9 +85,6 @@ String 값으로 넣어 String 값으로 반환되게 메소드를 구성했습�
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static String keyStore_Encryption(String str){
         String keyStore_Encryption_DATA="";
-        String iv = "";
-        Key keySpec;
-        String key = "";
 
         try {
             KeyStore keyStore = java.security.KeyStore.getInstance("AndroidKeyStore"); // Android KeyStore 접근
@@ -96,23 +93,8 @@ String 값으로 넣어 String 값으로 반환되게 메소드를 구성했습�
                     (KeyStore.SecretKeyEntry) keyStore.getEntry(alias,null); // 별칭에 맞게 비밀키 접근
             SecretKey secretKey = secretKeyEntry.getSecretKey(); // 대칭키 반환
 
-            // 키는 'String'형태로 반환
-            if((Build.VERSION.SDK_INT <= Build.VERSION_CODES.N))
-                key = new String(Base64.encodeBase64(secretKey.getEncoded()));
-            else
-                key = Base64.encodeBase64String(secretKey.getEncoded());
-
-            iv = key.substring(0,16);
-            byte[] keyBytes = new byte[16];
-            byte[] b = key.getBytes("UTF-8");
-            int len = b.length;
-            if(len > keyBytes.length)
-                len = keyBytes.length;
-            System.arraycopy(b, 0, keyBytes, 0, len); // b의 0번지 부터 len길이 만큼 keybytes 0번지부터 복사
-            keySpec = new SecretKeySpec(keyBytes, "AES");
-
             Cipher c = Cipher.getInstance("AES/CBC/PKCS7Padding");
-            c.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes())); // 암호화 준비
+            c.init(Cipher.ENCRYPT_MODE,secretKey); // 암호화 준비
 
             // AES 암호화
             byte[] encrypted = c.doFinal(str.getBytes("UTF-8"));
@@ -159,10 +141,7 @@ String 값으로 넣어 String 값으로 반환되게 메소드를 구성했습�
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static String keyStore_Decryption(String str){
         String keyStore_Decryption_DATA="";
-        String iv = "";
-        Key keySpec;
-        String key = "";
-
+      
         try {
             KeyStore keyStore = java.security.KeyStore.getInstance("AndroidKeyStore"); // Android KeyStore 접근
             keyStore.load(null); // 로드
@@ -170,25 +149,9 @@ String 값으로 넣어 String 값으로 반환되게 메소드를 구성했습�
                     (KeyStore.SecretKeyEntry) keyStore.getEntry(alias,null); // 별칭에 맞게 비밀키 접근
             SecretKey secretKey = secretKeyEntry.getSecretKey(); // 비밀키 반환
 
-            
-            // 비밀키는 'String'형태로 반환
-            if((Build.VERSION.SDK_INT <= Build.VERSION_CODES.N))
-                key = new String(Base64.encodeBase64(secretKey.getEncoded()));
-            else
-                key = Base64.encodeBase64String(secretKey.getEncoded());
-
-            iv = key.substring(0,16);
-            byte[] keyBytes = new byte[16];
-            byte[] b = key.getBytes("UTF-8");
-            int len = b.length;
-            if(len > keyBytes.length)
-                len = keyBytes.length;
-            System.arraycopy(b, 0, keyBytes, 0, len); // b의 0번지 부터 len길이 만큼 keybytes 0번지부터 복사
-            keySpec = new SecretKeySpec(keyBytes, "AES");
-
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
-            cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes("UTF-8"))); //
+            cipher.init(Cipher.DECRYPT_MODE,secretKey);
 
             // 암호화된 인코딩 데이터 -> 디코딩
             byte[] byteStr = Base64.decodeBase64(str.getBytes());
