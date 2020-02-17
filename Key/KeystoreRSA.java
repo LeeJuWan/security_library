@@ -34,7 +34,7 @@ import javax.security.auth.x500.X500Principal;
 
 public class KEYSTORE {
 
-    public final static String alias = "com.example.nslngiot"; // KeyStore alias
+    public final static String alias = "youralias"; // KeyStore alias
 
     public void keyStore_init(Context context){
         try {
