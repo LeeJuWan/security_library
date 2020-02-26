@@ -28,8 +28,8 @@ public class FileFilter {
                     }else{
 
                         String [] array=file.split("\\."); // ex) test.jsp%00.jpg 검출목적
-                        if(array[1].toLowerCase().endsWith("jpg") || file.toLowerCase().endsWith("png") ||
-                                file.toLowerCase().endsWith("jpeg")) // 4단계 문자열의 마지막 확장자 검증
+                        if(array[1].toLowerCase().endsWith("jpg") || array[1].toLowerCase().endsWith("png") ||
+                                array[1].toLowerCase().endsWith("jpeg")) // 4단계 문자열의 마지막 확장자 검증
                         {
                             // 5단계 mime type 검증, mime type 변환 진행
                             MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
