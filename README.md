@@ -12,3 +12,18 @@
 최대한 이해하기 쉽게 주석을 달아놓았습니다.  
 더불어 저는 개발자가 아니기 때문에 수준 높은 코드 구현은 하지 못합니다.  
 소스 코드의 틀린점이 있다면 Issues를 해주세요. 학교 시간 몰래 반영하겠습니다 !  
+
+**모든 코드는 static 형태로 제공됩니다. 하여 입맛에 맞게 커스터마이징 하셔도됩니다.**  
+
+## sample 1.
+EditTextCache.editTextCacheSecurity(et_id); // editText id 입력 키보드 캐시 비활성화    
+
+## sample 2. 
+if(FileFilter.fileFilter(fileDATA)){  
+  // not safe  
+ }  
+ else{  
+  // safe  
+ }  
+ 
+
