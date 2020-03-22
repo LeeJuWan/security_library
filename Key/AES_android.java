@@ -64,9 +64,7 @@ public class AES {
         keySpec = new SecretKeySpec(keyBytes, "AES");
         
         // 운용모드의 권고사항은 'CBC'로 하시면됩니다.
-        // 현재 패딩 방법이 'PKCS5Padding'도 존재하는데 'PKCS7Padding'이 더 상위버전이라고 해서 사용했습니다.
-        // KeyStore에서도 패딩을 'PKCS7Padding' 지원하고 있으니 참고해주세요
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding"); 
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); 
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes())); // 암호화 준비
 
         // AES 암호화
@@ -97,7 +95,7 @@ public class AES {
         keySpec = new SecretKeySpec(keyBytes, "AES");
 
         // 암호화와 동일하게 운용모드 , 패딩 방법 구성 진행
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes("UTF-8"))); // 복호화 준비
 
         // 암호화된 인코딩 데이터, 디코딩 변환
